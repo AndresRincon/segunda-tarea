@@ -1,8 +1,26 @@
 import React, { Component } from 'react';
 import './App.css';
+import ValidationComponent from './ValidationComponent/ValidationComponent';
+import Charlist from './CharComponent/CharComponent'
 
 class App extends Component {
+  state = {
+    longitdEsc : ''
+  }
+  outputsLength = (event) =>{
+    this.setState({longitdEsc: event.target.value})
+  }
+  deletLetras = (index) =>{
+    const letras = this.state.longitdEsc.split('');
+    letras.splice(index,1);
+    const nuevaLetra = letras.join('');
+    this.setState({longitdEsc:nuevaLetra});
+  }
   render() {
+    const listaChar = this.state.longitdEsc.split('').map((lis, index) => {
+      return <Charlist letra={lis} key={index} delet={() => this.deletLetras(index)} />
+    });
+
     return (
       <div className="App">
         <ol>
@@ -14,6 +32,11 @@ class App extends Component {
           <li>When you click a CharComponent, it should be removed from the entered text.</li>
         </ol>
         <p>Hint: Keep in mind that JavaScript strings are basically arrays!</p>
+
+        <input type="text" onChange={this.outputsLength} value={this.state.longitdEsc} />
+        <p>Longitud del escrito : {this.state.longitdEsc}</p>
+        <ValidationComponent long={this.state.longitdEsc.length} />
+        {listaChar}
       </div>
     );
   }
